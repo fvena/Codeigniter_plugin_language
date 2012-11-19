@@ -1,6 +1,6 @@
 <?php (defined('BASEPATH')) OR exit('No direct script access allowed');
 
-class MY_Lang extends CI_Lang
+class MY_Lang extends MX_Lang
 {
   var $lang = '';
 
@@ -23,7 +23,7 @@ class MY_Lang extends CI_Lang
       if(strlen($this->lang) == 2 && array_key_exists($this->lang,$config['languages']) == true)
       {
         // Si el idioma existe, cambia al idioma correspondiente
-        $config['language']=$config['languages'][$this->lang];
+        $config['language']=$config['languages'][$this->lang][0];
       }
       elseif($config['redirect_urls'] == true || strlen($this->lang) == 2 && array_key_exists($this->lang,$config['languages']) == false)
       {
@@ -69,6 +69,49 @@ class MY_Lang extends CI_Lang
     }
 
     return $uri;
+  }
+
+  function lang_list($option='flags',$separation=' ')
+  {
+    $config =& get_config();
+
+    if(isset($config['languages'])){
+      $langs = $config['languages'];
+      $list = array();
+
+      foreach ($langs as $lang => $folder) {
+        $selected = '';
+
+        if ($this->lang == $lang) {$selected = 'selected';}
+
+        switch ($option) {
+          case 'flags':
+            $class = 'flag '.$lang.' '.$selected;
+            $text = ' ';
+            break;
+          case 'iso':
+            $class = $selected;
+            $text = $lang;
+            break;
+          case 'text':
+          default:
+            $class = $selected;
+            $text = $folder[1];
+            break;
+        }
+
+        $anchor = array(
+          'class' => $class,
+          'title' => $folder[1]
+        );
+
+        array_push($list, anchor($this->switch_uri($lang),$text,$anchor));
+      }
+
+      return implode($separation,$list);
+    }
+
+    return null;
   }
 
 }

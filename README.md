@@ -17,7 +17,7 @@ Copiamos los archivos en sus respectivas carpetas, manteniendo el sistema de dir
 
 Configuración
 -------------
-Debe completar el array `languages` con los idiomas soportados, indicando el código del idioma que se mostrará en la url y la carpeta que contiene los archivos del idioma.
+Debe completar el array `languages` con los idiomas soportados, indicando el código del idioma que se mostrará en la url, la carpeta que contiene los archivos del idioma y como queremos que se muestre el nombre del idioma, al hacer hover sobre los enlaces, o al listar con la opción `text` todos los idiomas soportados.
 
 La variable `redirect_urls` indica si queremos que se redirija automaticamente a la url del idioma por defecto, cuando no se especifica ninguno.
 
@@ -27,8 +27,8 @@ La variable `redirect_urls` indica si queremos que se redirija automaticamente a
 // aplication/config/config.php
 
 $config['languages'] = array(
-  "es" => "spanish",
-  "en" => "english"
+  "es" => array("spanish","español"),
+  "en" => array("english","english")
 );
 
 $config['redirect_urls']=TRUE;
@@ -88,6 +88,20 @@ Funciones
 
 * `lang()` - Devuelve el código del idioma del páis seleccionado actualmente.
 
+* `lang_list(option,separation)` - Función que devuelve una lista de enlaces para cambiar de idioma, con los idiomas definidos por el usuario en el config. Además le añade la clase `selected` al idioma seleccionado
+
+  Existen tres tipos de listas devueltas, según la opcion elegida:
+
+    + **flags** - Devuelve una lista de enlaces con la clase `flag es` o el código de cada idioma. Permite con css, mostrar la bandera de cada país.
+
+    + **iso** - Devuelve una lista de enlaces formados por los códigos iso de cada idioma: ES | EN | FR
+
+    + **text** - Devuelve una lista de enlaces formados por los nombres completos de los idiomas que definimos en el config: english | español
+
+  El **separador** indica que caracter o caracteres servirán para separar cada enlace.
+
+  Por defecto la opción es flags y la separación es un espacion en blanco.
+
 
 Modo de uso
 -----------
@@ -110,6 +124,12 @@ Modo de uso
 <?= $this->lang->lang(); ?>
 ```
 
+```
+// Redirect, anchors, ...
+
+<?= anchor('/'.$this->lang->lang().'/module/controller/method') ?>
+```
+
 
 Autor
 -----
@@ -125,5 +145,5 @@ Si encontraís errores, ideas para mejorarlo o nuevas funcionalidades, escribidm
 
 Versión
 --------
-+ v1.0
++ v1.1
 
